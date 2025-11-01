@@ -5,6 +5,10 @@ on:
     tags:
       - "v*"
 
+permissions:
+  contents: write
+  packages: write
+
 env:
   CARGO_TERM_COLOR: always
 
@@ -17,14 +21,19 @@ jobs:
         include:
           - target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
+            format: tar.gz
           - target: aarch64-unknown-linux-gnu
             os: ubuntu-latest
+            format: tar.gz
           - target: x86_64-pc-windows-msvc
             os: windows-latest
+            format: zip
           - target: x86_64-apple-darwin
             os: macos-latest
+            format: tar.gz
           - target: aarch64-apple-darwin
             os: macos-latest
+            format: tar.gz
 
     steps:
       - uses: actions/checkout@v4
@@ -34,6 +43,11 @@ jobs:
         with:
           targets: ${{ matrix.target }}
 
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+          cache-on-failure: true
+
       - name: Install cross-compilation tools
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         run: |
@@ -41,52 +55,102 @@ jobs:
           sudo apt-get install -y gcc-aarch64-linux-gnu
           echo "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
 
+      - name: Install cargo-deb
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: cargo install cargo-deb
+
+      - name: Install cargo-generate-rpm
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: cargo install cargo-generate-rpm
+
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
 
-      - name: Get crate name
-        id: crate_name
-        run: echo "name=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].name')" >> $GITHUB_OUTPUT
+      - name: Get crate info
+        id: crate_info
+        run: |
+          echo "name=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].name')" >> $GITHUB_OUTPUT
+          echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
         shell: bash
 
-      - name: Get version
-        id: version
-        run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
-        shell: bash
-
-      - name: Create archive (Unix)
+      - name: Create generic archive (Unix)
         if: runner.os != 'Windows'
         run: |
           cd target/${{ matrix.target }}/release
-          tar czf ../../../${{ steps.crate_name.outputs.name }}-${{ matrix.target }}-${{ steps.version.outputs.version }}.tar.gz ${{ steps.crate_name.outputs.name }}
+          tar czf ../../../${{ steps.crate_info.outputs.name }}-${{ matrix.target }}-${{ steps.crate_info.outputs.version }}.tar.gz ${{ steps.crate_info.outputs.name }}
 
-      - name: Create archive (Windows)
+      - name: Create generic archive (Windows)
         if: runner.os == 'Windows'
         run: |
           cd target/${{ matrix.target }}/release
-          7z a ../../../${{ steps.crate_name.outputs.name }}-${{ matrix.target }}-${{ steps.version.outputs.version }}.zip ${{ steps.crate_name.outputs.name }}.exe
+          7z a ../../../${{ steps.crate_info.outputs.name }}-${{ matrix.target }}-${{ steps.crate_info.outputs.version }}.zip ${{ steps.crate_info.outputs.name }}.exe
 
-      - name: Upload artifact
+      - name: Create Windows executable
+        if: runner.os == 'Windows'
+        run: |
+          cp target/${{ matrix.target }}/release/${{ steps.crate_info.outputs.name }}.exe ${{ steps.crate_info.outputs.name }}-${{ matrix.target }}-${{ steps.crate_info.outputs.version }}.exe
+
+      - name: Create DEB package
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: |
+          cargo deb --target ${{ matrix.target }} --no-build
+          cp target/${{ matrix.target }}/debian/*.deb ${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-amd64.deb
+
+      - name: Create RPM package
+        if: matrix.target == 'x86_64-unknown-linux-gnu'
+        run: |
+          cargo generate-rpm --target ${{ matrix.target }}
+          cp target/${{ matrix.target }}/generate-rpm/*.rpm ${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-1.x86_64.rpm
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.crate_name.outputs.name }}-${{ matrix.target }}
+          name: ${{ steps.crate_info.outputs.name }}-${{ matrix.target }}
           path: |
             *.tar.gz
             *.zip
+            *.exe
+            *.deb
+            *.rpm
 
   release:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
+      - name: Get crate info
+        id: crate_info
+        run: |
+          echo "name=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].name')" >> $GITHUB_OUTPUT
+          echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           files: artifacts/**/*
+          name: "${{ steps.crate_info.outputs.name }} ${{ steps.crate_info.outputs.version }}"
+          body: |
+            ## Installation
+
+            | System / Distribution | File | Description |
+            |:----------------------|:-----|:------------|
+            | **Generic Linux** | `${{ steps.crate_info.outputs.name }}-x86_64-unknown-linux-gnu-${{ steps.crate_info.outputs.version }}.tar.gz` | Extract and run the binary |
+            | **Debian / Ubuntu** | `${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-amd64.deb` | Install using `dpkg -i` |
+            | **Fedora / CentOS / openSUSE** | `${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-1.x86_64.rpm` | Install using `rpm -i` or `dnf install` |
+            | **Windows** | `${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.exe` | Standalone executable |
+            | **Windows (Archive)** | `${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.zip` | Extract and run |
+            | **macOS Intel** | `${{ steps.crate_info.outputs.name }}-x86_64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz` | Extract and run the binary |
+            | **macOS Apple Silicon** | `${{ steps.crate_info.outputs.name }}-aarch64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz` | Extract and run the binary |
+
+            ## What's Changed
+
+            See the full changelog below for all changes in this release.
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
