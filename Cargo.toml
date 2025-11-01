@@ -2,6 +2,13 @@
 name = "cachefetch"
 version = "0.0.2"
 edition = "2024"
+authors = ["ErenayDev <erenaydev@proton.me>"]
+description = "Fast CLI tool that shows cache file sizes"
+repository = "https://github.com/ErenayDev/cachefetch"
+license = "MIT"
+keywords = ["cli", "cache", "disk", "size", "fetch"]
+categories = ["command-line-utilities"]
+readme = "README.md"
 
 [dependencies]
 byte-unit = "5.1.6"
@@ -22,3 +29,19 @@ cachefetch is a very fast, configurable CLI fetch tool that shows your cache fil
 It supports multiple cache directories and provides clean table output.
 """
 license = "MIT"
+
+[package.metadata.deb]
+maintainer = "ErenayDev <erenaydev@proton.me>"
+copyright = "2025, ErenayDev <erenaydev@proton.me>"
+license-file = ["LICENSE", "4"]
+extended-description = """
+A fast and configurable command-line tool for displaying cache directory sizes.
+cachefetch scans common cache locations and displays their sizes in a clean table format.
+"""
+depends = "$auto"
+section = "utility"
+priority = "optional"
+assets = [
+    ["target/release/cachefetch", "usr/bin/", "755"],
+    ["README.md", "usr/share/doc/cachefetch/", "644"],
+]
