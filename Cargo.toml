@@ -2,13 +2,6 @@
 name = "cachefetch"
 version = "0.0.2"
 edition = "2024"
-authors = ["ErenayDev <erenaydev@proton.me>"]
-description = "Fast CLI tool that shows cache file sizes"
-repository = "https://github.com/ErenayDev/cachefetch"
-license = "MIT"
-keywords = ["cli", "cache", "disk", "size", "fetch"]
-categories = ["command-line-utilities"]
-readme = "README.md"
 
 [dependencies]
 byte-unit = "5.1.6"
