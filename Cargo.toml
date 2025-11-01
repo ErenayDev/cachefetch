@@ -9,7 +9,6 @@ documentation = "https://github.com/ErenayDev/cachefetch#readme"
 homepage = "https://github.com/ErenayDev/cachefetch"
 repository = "https://github.com/ErenayDev/cachefetch"
 license = "MIT"
-license-file = "LICENSE"
 keywords = ["cli", "cache", "disk", "size", "fetch"]
 categories = ["command-line-utilities"]
 readme = "README.md"
