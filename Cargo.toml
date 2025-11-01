@@ -1,6 +1,6 @@
 [package]
 name = "cachefetch"
-version = "0.1.0"
+version = "0.0.2"
 edition = "2024"
 
 [dependencies]
@@ -9,6 +9,5 @@ crossterm = "0.29.0"
 ratatui = "0.29.0"
 
 [package.metadata.binstall]
-pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }-v{ version }{ archive-suffix }"
-bin-dir = "{ name }-{ target }-v{ version }/{ bin }{ binary-ext }"
-pkg-fmt = "tgz"
+pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }-{ version }{ archive-suffix }"
+bin-dir = "{ bin }{ binary-ext }"
