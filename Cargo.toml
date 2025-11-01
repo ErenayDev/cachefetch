@@ -11,3 +11,14 @@ ratatui = "0.29.0"
 [package.metadata.binstall]
 pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }-{ version }{ archive-suffix }"
 bin-dir = "{ bin }{ binary-ext }"
+
+[package.metadata.generate-rpm]
+assets = [
+  { source = "target/release/cachefetch", dest = "/usr/bin/cachefetch", mode = "755" },
+]
+summary = "Fast CLI tool that shows cache file sizes"
+description = """
+cachefetch is a very fast, configurable CLI fetch tool that shows your cache file sizes in your disk.
+It supports multiple cache directories and provides clean table output.
+"""
+license = "MIT"
