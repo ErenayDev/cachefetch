@@ -37,7 +37,6 @@ license = "MIT"
 [package.metadata.deb]
 maintainer = "ErenayDev <erenaydev@proton.me>"
 copyright = "2025, ErenayDev <erenaydev@proton.me>"
-license-file = ["LICENSE", "4"]
 extended-description = """
 A fast and configurable command-line tool for displaying cache directory sizes.
 cachefetch scans common cache locations and displays their sizes in a clean table format.
