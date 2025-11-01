@@ -100,7 +100,7 @@ jobs:
         if: matrix.target == 'x86_64-unknown-linux-gnu'
         run: |
           cargo generate-rpm --target ${{ matrix.target }}
-          cp target/${{ matrix.target }}/generate-rpm/*.rpm ${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-1.x86_64.rpm
+          find target/${{ matrix.target }}/generate-rpm -name "*.rpm" -exec cp {} ${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-1.x86_64.rpm \;
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
