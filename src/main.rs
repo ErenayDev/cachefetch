@@ -1,54 +1,69 @@
 mod cache_folders;
+mod get_os;
 mod get_size;
 
 use byte_unit::Byte;
-use cache_folders::FOLDERS;
+use get_os::detect_system;
 use get_size::get_size;
-use ratatui::{
-    Terminal,
-    backend::CrosstermBackend,
-    layout::{Constraint, Direction, Layout},
-    style::{Color, Style},
-    widgets::{Row, Table},
-};
-use std::{io, path::Path};
+use std::path::Path;
+
+use terminal_size::{Height, Width, terminal_size};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let stdout = io::stdout();
-    let backend = CrosstermBackend::new(stdout);
-    let mut terminal = Terminal::new(backend)?;
-
-    let cache_data: Vec<(String, String)> = FOLDERS
+    let folders = detect_system();
+    let mut cache_data: Vec<(String, u64)> = folders
         .iter()
-        .map(|folder| {
+        .filter_map(|folder| {
             let path = Path::new(folder);
-            let size = get_size(path);
-            let size_formatted =
-                Byte::from_u64(size.unwrap_or(0)).get_appropriate_unit(byte_unit::UnitType::Binary);
-
-            (path.display().to_string(), format!("{:.2}", size_formatted))
+            if let Ok(size) = get_size(path) {
+                if size > 0 {
+                    Some((folder.to_string(), size))
+                } else {
+                    None
+                }
+            } else {
+                None
+            }
         })
         .collect();
 
-    terminal.draw(|f| {
-        let rows: Vec<Row> = cache_data
-            .iter()
-            .map(|(path, size)| Row::new(vec![path.clone(), size.clone()]))
-            .collect();
+    cache_data.sort_by(|a, b| b.1.cmp(&a.1));
 
-        let table = Table::new(rows, [Constraint::Min(50), Constraint::Min(10)])
-            .header(
-                Row::new(vec!["Cache Folder", "Size"]).style(Style::default().fg(Color::Yellow)),
+    let terminal_width = if let Some((Width(w), Height(_))) = terminal_size() {
+        w as usize
+    } else {
+        80
+    };
+
+    let size_column_width = 15;
+    let padding = 3;
+    let path_column_width = terminal_width.saturating_sub(size_column_width + padding);
+
+    println!(
+        "{:<width$} {:>15}",
+        "Cache Folder",
+        "Size",
+        width = path_column_width
+    );
+    println!("{}", "─".repeat(terminal_width));
+
+    for (path, size) in cache_data {
+        let size_formatted = Byte::from_u64(size).get_appropriate_unit(byte_unit::UnitType::Binary);
+        let truncated_path = if path.len() > path_column_width {
+            format!(
+                "...{}",
+                &path[path.len().saturating_sub(path_column_width - 3)..]
             )
-            .style(Style::default().fg(Color::White));
-
-        let area = Layout::default()
-            .direction(Direction::Vertical)
-            .constraints([Constraint::Length(cache_data.len() as u16 + 2)])
-            .split(f.area())[0];
-
-        f.render_widget(table, area);
-    })?;
+        } else {
+            path
+        };
+        println!(
+            "{:<width$} {:>15.2}",
+            truncated_path,
+            size_formatted,
+            width = path_column_width
+        );
+    }
 
     Ok(())
 }

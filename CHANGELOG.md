@@ -4,6 +4,59 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### Bug Fixes
+
+- Removed license-file field
+
+### Documentation
+
+- Fix star history
+
+### Features
+
+- Add package metadata and Debian packaging configuration
+- Add package metadata and MIT license
+- Add support for different terminal sizes
+- Add support for different OS
+
+### Miscellaneous Tasks
+
+- Added terminal_size package, version 0.0.3
+
+### Refactor
+
+- Deleted empty line
+
+### Ci
+
+- Added links to downloads table in releases
+
+## [0.0.2] - 2025-11-01
+
+### Bug Fixes
+
+- Add rpm metadata
+
+### Documentation
+
+- Add README
+
+### Miscellaneous Tasks
+
+- Change version from 0.1.0 to 0.0.2 and fixed binstall format
+
+### Ci
+
+- Created dependabot.yml for cargo ecosystem
+- Updated for new build platforms. added Swatinem/rust-cache
+- Fix the RPM package error
+
+## [0.0.1] - 2025-10-31
+
+### Documentation
+
+- Update changelog
+
 ### Features
 
 - Initial commit

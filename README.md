@@ -42,7 +42,7 @@ Just a placeholder now. Coming soon..
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=ErenayDev/cachefetch&type=Date)](https://www.star-history.com/#ErenayDev/cachefetch&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=ErenayDev/cachefetch&type=date&legend=top-left)](https://www.star-history.com/#ErenayDev/cachefetch&type=date&legend=top-left)
 
 ## Contributing
 Contributions are welcome! Here is how can you:

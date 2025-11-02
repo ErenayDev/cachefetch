@@ -134,19 +134,19 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: artifacts/**/*
-          name: "${{ steps.crate_info.outputs.name }} ${{ steps.crate_info.outputs.version }}"
+          name: "v${{ steps.crate_info.outputs.version }}"
           body: |
             ## Installation
 
             | System / Distribution | File | Description |
             |:----------------------|:-----|:------------|
-            | **Generic Linux** | `${{ steps.crate_info.outputs.name }}-x86_64-unknown-linux-gnu-${{ steps.crate_info.outputs.version }}.tar.gz` | Extract and run the binary |
-            | **Debian / Ubuntu** | `${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-amd64.deb` | Install using `dpkg -i` |
-            | **Fedora / CentOS / openSUSE** | `${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-1.x86_64.rpm` | Install using `rpm -i` or `dnf install` |
-            | **Windows** | `${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.exe` | Standalone executable |
-            | **Windows (Archive)** | `${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.zip` | Extract and run |
-            | **macOS Intel** | `${{ steps.crate_info.outputs.name }}-x86_64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz` | Extract and run the binary |
-            | **macOS Apple Silicon** | `${{ steps.crate_info.outputs.name }}-aarch64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz` | Extract and run the binary |
+            | **Generic Linux** | [${{ steps.crate_info.outputs.name }}-x86_64-unknown-linux-gnu-${{ steps.crate_info.outputs.version }}.tar.gz](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-x86_64-unknown-linux-gnu-${{ steps.crate_info.outputs.version }}.tar.gz) | Extract and run the binary |
+            | **Debian / Ubuntu** | [${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-amd64.deb](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-amd64.deb) | Install using `dpkg -i` |
+            | **Fedora / CentOS / openSUSE** | [${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-1.x86_64.rpm](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-1.x86_64.rpm) | Install using `rpm -i` or `dnf install` |
+            | **Windows** | [${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.exe](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.exe) | Standalone executable |
+            | **Windows (Archive)** | [${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.zip](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.zip) | Extract and run |
+            | **macOS Intel** | [${{ steps.crate_info.outputs.name }}-x86_64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-x86_64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz) | Extract and run the binary |
+            | **macOS Apple Silicon** | [${{ steps.crate_info.outputs.name }}-aarch64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-aarch64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz) | Extract and run the binary |
 
             ## What's Changed
 
