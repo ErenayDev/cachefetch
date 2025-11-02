@@ -2,15 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [0.0.3] - 2025-11-02
 
 ### Bug Fixes
 
+- Removed license-file field
 - Removed license-file field
 
 ### Documentation
 
 - Fix star history
+- Update changelog
 
 ### Features
 
@@ -18,9 +20,12 @@ All notable changes to this project will be documented in this file.
 - Add package metadata and MIT license
 - Add support for different terminal sizes
 - Add support for different OS
+- Add support for different OS
+- Add support for different OS
 
 ### Miscellaneous Tasks
 
+- Added terminal_size package, version 0.0.3
 - Added terminal_size package, version 0.0.3
 
 ### Refactor
@@ -43,7 +48,9 @@ All notable changes to this project will be documented in this file.
 
 ### Miscellaneous Tasks
 
+- Change version from 0.1.0 to 0.0.2
 - Change version from 0.1.0 to 0.0.2 and fixed binstall format
+- Change version from 0.1.0 to 0.0.2
 
 ### Ci
 
