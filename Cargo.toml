@@ -1,6 +1,6 @@
 [package]
 name = "cachefetch"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2024"
 
 authors = ["ErenayDev <erenaydev@proton.me>"]
@@ -16,7 +16,7 @@ readme = "README.md"
 [dependencies]
 byte-unit = "5.1.6"
 crossterm = "0.29.0"
-ratatui = "0.29.0"
+terminal_size = "0.4.3"
 
 [package.metadata.binstall]
 pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }-{ version }{ archive-suffix }"
