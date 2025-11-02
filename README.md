@@ -4,13 +4,16 @@ cachefetch is very fast, configurable CLI fetch tool thats shows your cache file
 
 [![crates.io](https://img.shields.io/crates/v/cachefetch.svg)](https://crates.io/crates/cachefetch)
 [![Rust CI](https://github.com/ErenayDev/cachefetch/workflows/Rust%20CI/badge.svg)](https://github.com/ErenayDev/cachefetch/actions/workflows/ci.yml)
-[![Packaging status](https://repology.org/badge/vertical-allrepos/rust%3Acachefetch.svg)](https://repology.org/project/rust%3Acachefetch/versions)
 
 ## Preview
 
 <img src="assets/cachefetch.png" />
 
 ## Installation
+
+<a href="https://repology.org/project/rust%3Acachefetch/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/rust%3Acachefetch.svg?columns=2" alt="Packaging status" align="right">
+</a>
 
 ### Arch Linux / AUR
 Just a placeholder now. Coming soon..
