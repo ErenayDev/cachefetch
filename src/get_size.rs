@@ -39,11 +39,10 @@ fn calculate_dir_size(path: &Path) -> std::io::Result<u64> {
     let mut total = 0;
     if let Ok(entries) = fs::read_dir(path) {
         for entry in entries {
-            if let Ok(entry) = entry {
-                if let Ok(size) = get_size(&entry.path()) {
+            if let Ok(entry) = entry
+                && let Ok(size) = get_size(&entry.path()) {
                     total += size;
                 }
-            }
         }
     }
     Ok(total)
