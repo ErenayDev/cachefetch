@@ -147,10 +147,6 @@ jobs:
             | **Windows (Archive)** | [${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.zip](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-x86_64-pc-windows-msvc-${{ steps.crate_info.outputs.version }}.zip) | Extract and run |
             | **macOS Intel** | [${{ steps.crate_info.outputs.name }}-x86_64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-x86_64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz) | Extract and run the binary |
             | **macOS Apple Silicon** | [${{ steps.crate_info.outputs.name }}-aarch64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz](https://github.com/${{ github.repository }}/releases/download/v${{ steps.crate_info.outputs.version }}/${{ steps.crate_info.outputs.name }}-aarch64-apple-darwin-${{ steps.crate_info.outputs.version }}.tar.gz) | Extract and run the binary |
-
-            ## What's Changed
-
-            See the full changelog below for all changes in this release.
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
