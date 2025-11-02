@@ -2,6 +2,14 @@
 
 cachefetch is very fast, configurable CLI fetch tool thats shows your cache file sizes in your disk.
 
+[![crates.io](https://img.shields.io/crates/v/cachefetch.svg)](https://crates.io/crates/cachefetch)
+[![Rust CI](https://github.com/ErenayDev/cachefetch/workflows/Rust%20CI/badge.svg)](https://github.com/ErenayDev/cachefetch/actions/workflows/ci.yml)
+[![Packaging status](https://repology.org/badge/vertical-allrepos/rust%3Acachefetch.svg)](https://repology.org/project/rust%3Acachefetch/versions)
+
+## Preview
+
+<img src="assets/cachefetch.png" />
+
 ## Installation
 
 ### Arch Linux / AUR
