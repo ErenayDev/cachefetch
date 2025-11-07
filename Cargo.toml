@@ -1,6 +1,6 @@
 [package]
 name = "cachefetch"
-version = "0.0.3"
+version = "0.0.4"
 edition = "2024"
 
 authors = ["ErenayDev <erenaydev@proton.me>"]
@@ -16,7 +16,19 @@ readme = "README.md"
 [dependencies]
 byte-unit = "5.1.6"
 crossterm = "0.29.0"
+owo-colors = "4.2.3"
 terminal_size = "0.4.3"
+
+[dev-dependencies]
+criterion = { version = "0.7", features = ["html_reports"] }
+
+[[bench]]
+name = "main_bench"
+harness = false
+
+[lib]
+name = "cachefetch"
+path = "src/lib.rs"
 
 [package.metadata.binstall]
 pkg-url = "{ repo }/releases/download/v{ version }/{ name }-{ target }-{ version }{ archive-suffix }"
