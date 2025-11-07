@@ -1,5 +1,4 @@
 name: Rust CI
-
 on:
   pull_request:
   push:
@@ -7,10 +6,10 @@ on:
       - master
   schedule:
     - cron: "11 7 * * 1,4"
-
 env:
   RUSTFLAGS: -Dwarnings
-
+  CARGO_INCREMENTAL: 0
+  CARGO_TERM_COLOR: always
 jobs:
   fmt:
     runs-on: ubuntu-latest
@@ -28,7 +27,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
-      - uses: swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: clippy
+          shared-key: stable
+          save-if: ${{ github.ref == 'refs/heads/master' }}
       - run: cargo clippy --workspace --tests --examples -- -D warnings
 
   docs:
@@ -40,12 +43,17 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rust-docs
-      - uses: swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: docs
+          shared-key: stable
+          save-if: ${{ github.ref == 'refs/heads/master' }}
       - run: cargo doc --workspace --no-deps
 
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         rust: [stable]
@@ -54,8 +62,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           toolchain: ${{ matrix.rust }}
-      - uses: swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@v2
         with:
+          prefix-key: test
           key: ${{ matrix.os }}
-      - run: cargo test --workspace
-      - run: cargo test --workspace --examples --bins
+          shared-key: stable
+          save-if: ${{ github.ref == 'refs/heads/master' }}
+      - run: cargo test --workspace --no-fail-fast
+      - run: cargo test --workspace --examples --bins --no-fail-fast
