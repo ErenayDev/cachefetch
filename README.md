@@ -6,10 +6,6 @@ cachefetch is very fast, configurable CLI fetch tool thats shows your cache file
 [![Rust CI](https://img.shields.io/github/actions/workflow/status/ErenayDev/cachefetch/ci.yml?style=for-the-badge&label=Rust%20CI)](https://github.com/ErenayDev/cachefetch/actions/workflows/ci.yml)
 [![wakatime](https://wakatime.com/badge/user/1e0ec045-1710-4978-8b0d-7fc3982a2b32/project/6fc0e200-1eaa-40a3-867a-2e5838e6f6d2.svg?style=for-the-badge)](https://wakatime.com/badge/user/1e0ec045-1710-4978-8b0d-7fc3982a2b32/project/6fc0e200-1eaa-40a3-867a-2e5838e6f6d2)
 
-## Packaging status
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/rust%3Acachefetch.svg)](https://repology.org/project/rust%3Acachefetch/versions)
-
 ## Preview
 
 <img src="assets/cachefetch.png" />
