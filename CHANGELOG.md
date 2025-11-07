@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.4] - 2025-11-07
+
+### Documentation
+
+- Removed duplicate packaging status badge
+- Update changelog
+- Added preview image, packaging status images
+- Updated repology packaging status
+- Added benchmark, updated badges
+
+### Features
+
+- Added funding file
+
+### Miscellaneous Tasks
+
+- Add owo-colors and criterion benchmark
+
+### Performance
+
+- Added criterion benchmark
+- Updated get_size function with very performance-friendly implemetation
+
+### Refactor
+
+- Clippy lint fix
+- Cargo fmt linting fix
+- Main code moved to lib.rs
+- Clippy lint fix
+
+### Ci
+
+- Removed unneccesary whats changed title
+- Added testing workflow action
+
 ## [0.0.3] - 2025-11-02
 
 ### Bug Fixes
