@@ -1,50 +1,76 @@
-use std::{env, fs, path::Path};
+use std::{collections::VecDeque, env, fs, path::Path};
 
 pub fn get_size(path: &Path) -> std::io::Result<u64> {
-    let expanded_path = if path.starts_with("~") {
-        if let Ok(home) = env::var("HOME") {
-            Path::new(&home).join(path.strip_prefix("~").unwrap())
-        } else if let Ok(home) = env::var("USERPROFILE") {
-            Path::new(&home).join(path.strip_prefix("~").unwrap())
-        } else {
-            return Err(std::io::Error::new(
-                std::io::ErrorKind::NotFound,
-                "HOME/USERPROFILE environment variable not found",
-            ));
-        }
-    } else if path.starts_with("%") && path.ends_with("%") {
-        let var_name = path.to_str().unwrap().trim_matches('%');
-        let var_value = env::var(var_name).map_err(|_| {
-            std::io::Error::new(
-                std::io::ErrorKind::NotFound,
-                format!("{} environment variable not found", var_name),
-            )
-        })?;
-        Path::new(&var_value).to_path_buf()
-    } else {
-        path.to_path_buf()
-    };
+    let expanded_path = expand_path(path)?;
 
-    let metadata = fs::metadata(&expanded_path)?;
+    let metadata = fs::symlink_metadata(&expanded_path)?;
+
     if metadata.is_file() {
         Ok(metadata.len())
     } else if metadata.is_dir() {
-        calculate_dir_size(&expanded_path)
+        calculate_dir_size_iterative(&expanded_path)
     } else {
         Ok(0)
     }
 }
 
-fn calculate_dir_size(path: &Path) -> std::io::Result<u64> {
-    let mut total = 0;
-    if let Ok(entries) = fs::read_dir(path) {
-        for entry in entries {
-            if let Ok(entry) = entry
-                && let Ok(size) = get_size(&entry.path())
-            {
-                total += size;
-            }
+fn expand_path(path: &Path) -> std::io::Result<std::path::PathBuf> {
+    if let Some(path_str) = path.to_str() {
+        if path_str.starts_with('~') {
+            let home = env::var("HOME")
+                .or_else(|_| env::var("USERPROFILE"))
+                .map_err(|_| {
+                    std::io::Error::new(std::io::ErrorKind::NotFound, "Home directory not found")
+                })?;
+            let remaining = if path_str.len() > 1 && path_str.chars().nth(1) == Some('/') {
+                &path_str[2..]
+            } else if path_str.len() > 1 {
+                &path_str[1..]
+            } else {
+                ""
+            };
+            return Ok(Path::new(&home).join(remaining));
+        }
+
+        if path_str.starts_with('%') && path_str.ends_with('%') && path_str.len() > 2 {
+            let var_name = &path_str[1..path_str.len() - 1];
+            let var_value = env::var(var_name).map_err(|_| {
+                std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    format!("Environment variable {} not found", var_name),
+                )
+            })?;
+            return Ok(Path::new(&var_value).to_path_buf());
         }
     }
+
+    Ok(path.to_path_buf())
+}
+
+fn calculate_dir_size_iterative(path: &Path) -> std::io::Result<u64> {
+    let mut total = 0;
+    let mut dirs_to_process = VecDeque::new();
+    dirs_to_process.push_back(path.to_path_buf());
+
+    while let Some(current_dir) = dirs_to_process.pop_front() {
+        match fs::read_dir(&current_dir) {
+            Ok(entries) => {
+                for entry in entries.flatten() {
+                    match fs::symlink_metadata(entry.path()) {
+                        Ok(metadata) => {
+                            if metadata.is_file() {
+                                total += metadata.len();
+                            } else if metadata.is_dir() && !metadata.file_type().is_symlink() {
+                                dirs_to_process.push_back(entry.path());
+                            }
+                        }
+                        Err(_) => continue,
+                    }
+                }
+            }
+            Err(_) => continue,
+        }
+    }
+
     Ok(total)
 }
