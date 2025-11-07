@@ -16,18 +16,16 @@ pub fn get_size(path: &Path) -> std::io::Result<u64> {
 
 fn expand_path(path: &Path) -> std::io::Result<std::path::PathBuf> {
     if let Some(path_str) = path.to_str() {
-        if path_str.starts_with('~') {
+        if let Some(stripped) = path_str.strip_prefix('~') {
             let home = env::var("HOME")
                 .or_else(|_| env::var("USERPROFILE"))
                 .map_err(|_| {
                     std::io::Error::new(std::io::ErrorKind::NotFound, "Home directory not found")
                 })?;
-            let remaining = if path_str.len() > 1 && path_str.chars().nth(1) == Some('/') {
-                &path_str[2..]
-            } else if path_str.len() > 1 {
-                &path_str[1..]
+            let remaining = if let Some(without_slash) = stripped.strip_prefix('/') {
+                without_slash
             } else {
-                ""
+                stripped
             };
             return Ok(Path::new(&home).join(remaining));
         }
