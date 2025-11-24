@@ -14,7 +14,7 @@ categories = ["command-line-utilities"]
 readme = "README.md"
 
 [dependencies]
-byte-unit = "5.1.6"
+byte-unit = "5.2.0"
 crossterm = "0.29.0"
 owo-colors = "4.2.3"
 terminal_size = "0.4.3"
