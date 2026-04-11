@@ -21,24 +21,34 @@ fn benchmark_get_size(c: &mut Criterion) {
 
 fn benchmark_full_scan(c: &mut Criterion) {
     c.bench_function("full_cache_scan", |b| {
-        b.iter(|| {
-            let folders = detect_system();
-            let cache_data: Vec<(String, u64)> = folders
-                .iter()
-                .filter_map(|folder| {
-                    let path = Path::new(folder);
-                    if let Ok(size) = get_size(path) {
-                        if size > 0 {
-                            Some((folder.to_string(), size))
-                        } else {
-                            None
+        b.iter_custom(|iters| {
+            let mut total = std::time::Duration::ZERO;
+            for _ in 0..iters {
+                // Clear page cache for cold run (requires root on Linux)
+                #[cfg(target_os = "linux")]
+                if std::fs::write("/proc/sys/vm/drop_caches", "3").is_err() {
+                    // Only warn once per benchmark, not every iteration
+                    static WARNED: std::sync::Once = std::sync::Once::new();
+                    WARNED.call_once(|| {
+                         eprintln!("Warning: Unable to drop caches (requires root). Running warm cache benchmark.");
+                    });
+                }
+                let start = std::time::Instant::now();
+                let folders = detect_system();
+                let cache_data: Vec<(String, u64)> = folders
+                    .iter()
+                    .filter_map(|folder| {
+                        let path = Path::new(folder);
+                        match get_size(path) {
+                            Ok(size) if size > 0 => Some((folder.to_string(), size)),
+                            _ => None,
                         }
-                    } else {
-                        None
-                    }
-                })
-                .collect();
-            black_box(cache_data)
+                    })
+                    .collect();
+                total += start.elapsed();
+                black_box(cache_data);
+            }
+            total
         })
     });
 }
