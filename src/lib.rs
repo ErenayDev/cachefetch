@@ -12,7 +12,7 @@ pub fn create_progress_bar(current: u64, max: u64, width: usize) -> String {
     if max == 0 {
         return " ".repeat(width);
     }
-    let ratio = current as f64 / max as f64;
+    let ratio = (current as f64 / max as f64).min(1.0);
     let total_chars = ratio * width as f64;
     let filled_chars = total_chars as usize;
     let remaining_fraction = total_chars - filled_chars as f64;
@@ -20,8 +20,7 @@ pub fn create_progress_bar(current: u64, max: u64, width: usize) -> String {
     let mut bar = "█".repeat(filled_chars);
     if filled_chars < width && remaining_fraction > 0.0 {
         let char_index = ((1.0 - remaining_fraction) * chars.len() as f64) as usize;
-        let char_index = char_index.min(chars.len() - 1);
-        bar.push(chars[char_index]);
+        bar.push(chars[char_index.min(chars.len() - 1)]);
     }
     let remaining_width = width.saturating_sub(bar.chars().count());
     bar.push_str(&" ".repeat(remaining_width));
@@ -29,10 +28,12 @@ pub fn create_progress_bar(current: u64, max: u64, width: usize) -> String {
 }
 
 pub fn truncate_path(path: &str, max_width: usize) -> String {
-    if path.len() <= max_width {
+    let chars: Vec<char> = path.chars().collect();
+    if chars.len() <= max_width {
         return path.to_string();
     }
-    format!("...{}", &path[path.len().saturating_sub(max_width - 3)..])
+    let start = chars.len().saturating_sub(max_width.saturating_sub(3));
+    format!("...{}", chars[start..].iter().collect::<String>())
 }
 
 pub fn format_size(size: u64) -> String {
@@ -46,14 +47,9 @@ pub fn run_cachefetch() -> Result<(), Box<dyn std::error::Error>> {
         .iter()
         .filter_map(|folder| {
             let path = Path::new(folder);
-            if let Ok(size) = get_size(path) {
-                if size > 0 {
-                    Some((folder.to_string(), size))
-                } else {
-                    None
-                }
-            } else {
-                None
+            match get_size(path) {
+                Ok(size) if size > 0 => Some((folder.to_string(), size)),
+                _ => None,
             }
         })
         .collect();
@@ -63,7 +59,7 @@ pub fn run_cachefetch() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    cache_data.sort_by(|a, b| b.1.cmp(&a.1));
+    cache_data.sort_unstable_by_key(|b| std::cmp::Reverse(b.1));
 
     let terminal_width = if let Some((Width(w), Height(_))) = terminal_size() {
         w as usize
