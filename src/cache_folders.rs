@@ -1,3 +1,4 @@
+/// non root user folder
 pub const LINUX_FOLDERS: &[&str] = &[
     "~/.cache/pip",
     "~/.cache/yarn",
@@ -9,6 +10,8 @@ pub const LINUX_FOLDERS: &[&str] = &[
     "~/.cache/mypy",
     "~/.cache/eslint",
     "~/.cache/prettier",
+    "~/.cache/helm",
+    "~/.cache/JetBrains",
     "~/.npm/_cacache",
     "~/.npm/_logs",
     "~/.yarn/cache",
@@ -24,6 +27,14 @@ pub const LINUX_FOLDERS: &[&str] = &[
     "~/.sbt/boot",
     "~/.ivy2/cache",
     "~/.nuget/packages",
+    "~/.kube/cache",
+    "~/.kube/http-cache",
+    "~/.terraform.d/plugin-cache",
+    "~/.config/Code/Cache",
+    "~/.config/Code/CachedData",
+    "~/.config/Code/CachedExtensions",
+    "~/.config/Code/Code Cache",
+    "~/.config/Code/GPUCache",
 ];
 
 pub const DEBIAN_UBUNTU_FOLDERS: &[&str] = &["/var/cache/apt/archives", "/var/cache/debconf"];
@@ -36,14 +47,24 @@ pub const ARCH_FOLDERS: &[&str] = &["/var/cache/pacman/pkg", "~/.cache/yay", "~/
 
 pub const OPENSUSE_FOLDERS: &[&str] = &["/var/cache/zypp/packages"];
 
+/// root user folder
+pub const LINUX_SYSTEM_FOLDERS: &[&str] = &["/var/lib/docker/buildkit"];
+
 pub const MACOS_FOLDERS: &[&str] = &[
     "~/Library/Caches/pip",
     "~/Library/Caches/yarn",
     "~/Library/Caches/pnpm",
     "~/Library/Caches/deno",
     "~/Library/Caches/go-build",
+    "~/Library/Caches/helm",
+    "~/Library/Caches/JetBrains",
     "~/Library/Caches/com.github.wez.wezterm",
     "~/Library/Caches/Homebrew",
+    "~/Library/Application Support/Code/Cache",
+    "~/Library/Application Support/Code/CachedData",
+    "~/Library/Application Support/Code/CachedExtensions",
+    "~/Library/Application Support/Code/Code Cache",
+    "~/Library/Application Support/Code/GPUCache",
     "~/.npm/_cacache",
     "~/.npm/_logs",
     "~/.yarn/cache",
@@ -58,6 +79,9 @@ pub const MACOS_FOLDERS: &[&str] = &[
     "~/.sbt/boot",
     "~/.ivy2/cache",
     "~/.nuget/packages",
+    "~/.kube/cache",
+    "~/.kube/http-cache",
+    "~/.terraform.d/plugin-cache",
 ];
 
 pub const WINDOWS_FOLDERS: &[&str] = &[
@@ -66,7 +90,14 @@ pub const WINDOWS_FOLDERS: &[&str] = &[
     "%LOCALAPPDATA%\\pnpm\\cache",
     "%LOCALAPPDATA%\\deno",
     "%LOCALAPPDATA%\\go-build",
+    "%LOCALAPPDATA%\\JetBrains",
     "%APPDATA%\\npm-cache",
+    "%APPDATA%\\Code\\Cache",
+    "%APPDATA%\\Code\\CachedData",
+    "%APPDATA%\\Code\\CachedExtensions",
+    "%APPDATA%\\Code\\Code Cache",
+    "%APPDATA%\\Code\\GPUCache",
+    "%APPDATA%\\helm",
     "%USERPROFILE%\\.cargo\\registry\\cache",
     "%USERPROFILE%\\.cargo\\registry\\src",
     "%USERPROFILE%\\.cargo\\git\\db",
@@ -77,6 +108,10 @@ pub const WINDOWS_FOLDERS: &[&str] = &[
     "%USERPROFILE%\\.sbt\\boot",
     "%USERPROFILE%\\.ivy2\\cache",
     "%USERPROFILE%\\.nuget\\packages",
+    "%USERPROFILE%\\.kube\\cache",
+    "%USERPROFILE%\\.kube\\http-cache",
+    "%USERPROFILE%\\.terraform.d\\plugin-cache",
     "%TEMP%",
+    "%TEMP%\\helm",
     "%LOCALAPPDATA%\\Temp",
 ];
