@@ -2,11 +2,47 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.0.4] - 2025-11-07
+## [0.1.0] - 2026-04-11
+
+### Documentation
+
+- Update preview image, add new fields
+
+### Features
+
+- Clear page cache for cold run on linux
+- Add root user folders
+
+### Miscellaneous Tasks
+
+- Update actions/checkout action to v5
+- Update softprops/action-gh-release action to v2
+- Update github artifact actions
+- Bump deps to latest
+- Add new folder,files
+
+### Performance
+
+- Optimize disk checking logic
+
+## [0.0.5] - 2025-11-07
 
 ### Documentation
 
 - Removed duplicate packaging status badge
+
+### Miscellaneous Tasks
+
+- Bump to 0.0.5
+
+### Ci
+
+- Updated cache mechanisim
+
+## [0.0.4] - 2025-11-07
+
+### Documentation
+
 - Update changelog
 - Added preview image, packaging status images
 - Updated repology packaging status
@@ -42,7 +78,6 @@ All notable changes to this project will be documented in this file.
 ### Bug Fixes
 
 - Removed license-file field
-- Removed license-file field
 
 ### Documentation
 
@@ -55,17 +90,10 @@ All notable changes to this project will be documented in this file.
 - Add package metadata and MIT license
 - Add support for different terminal sizes
 - Add support for different OS
-- Add support for different OS
-- Add support for different OS
 
 ### Miscellaneous Tasks
 
 - Added terminal_size package, version 0.0.3
-- Added terminal_size package, version 0.0.3
-
-### Refactor
-
-- Deleted empty line
 
 ### Ci
 
@@ -83,9 +111,7 @@ All notable changes to this project will be documented in this file.
 
 ### Miscellaneous Tasks
 
-- Change version from 0.1.0 to 0.0.2
 - Change version from 0.1.0 to 0.0.2 and fixed binstall format
-- Change version from 0.1.0 to 0.0.2
 
 ### Ci
 
