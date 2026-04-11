@@ -1,1 +1,30 @@
+# Rust
 /target
+
+# Build artifacts
+.bin/
+/package
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+*~
+*.bak
+*.tmp
+
+# Build outputs
+dist/
+build/
