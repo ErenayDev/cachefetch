@@ -103,7 +103,7 @@ jobs:
           find target/${{ matrix.target }}/generate-rpm -name "*.rpm" -exec cp {} ${{ steps.crate_info.outputs.name }}-${{ steps.crate_info.outputs.version }}-1.x86_64.rpm \;
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.crate_info.outputs.name }}-${{ matrix.target }}
           path: |
@@ -120,7 +120,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - name: Download artifacts
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           path: artifacts
       - name: Get crate info
