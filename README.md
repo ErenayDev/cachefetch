@@ -19,7 +19,7 @@ cachefetch is very fast, configurable CLI fetch tool thats shows your cache file
 ### Arch Linux / AUR
 
 ```sh
-$ sudo pacman -S cachefetch-bin
+$ yay -S cachefetch-bin
 ```
 
 Or you can directly install prebuilt binary with [binstall](https://github.com/cargo-bins/cargo-binstall).
