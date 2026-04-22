@@ -12,8 +12,8 @@ cachefetch is very fast, configurable CLI fetch tool thats shows your cache file
 
 ## Installation
 
-<a href="https://repology.org/project/rust%3Acachefetch/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/rust%3Acachefetch.svg?columns=2" alt="Packaging status" align="right">
+<a href="https://repology.org/project/cachefetch/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/cachefetch.svg" alt="Packaging status" align="right">
 </a>
 
 ### Arch Linux / AUR
