@@ -42,7 +42,7 @@ jobs:
           cache-on-failure: true
 
       - name: Cache cargo tools
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         if: matrix.target == 'x86_64-unknown-linux-gnu'
         with:
           path: ~/.cargo/bin
